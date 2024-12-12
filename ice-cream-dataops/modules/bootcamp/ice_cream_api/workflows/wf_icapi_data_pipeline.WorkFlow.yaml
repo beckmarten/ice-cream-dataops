@@ -1,0 +1,2 @@
+externalId: wf_icapi_data_pipeline
+description: This workflow extracts and processes data from various sources, creates asset hierarchies, and contextualizes time series data for OEE analysis.

@@ -11,11 +11,13 @@ workflowDefinition:
       timeout: 3600
       onFailure: abortWorkflow
     - externalId: create_asset_hierarchy
-      type: function
+      type: transformation
       parameters:
-        function:
+        transformation:
           externalId: create_asset_hierarchy
-      dependsOn: icapi_assets_extractor
+          concurrencyPolicy: waitForCurrent
+      dependsOn: 
+      - externalId: icapi_assets_extractor
       retries: 3
       timeout: 3600
       onFailure: abortWorkflow
@@ -24,7 +26,6 @@ workflowDefinition:
       parameters:
         function:
           externalId: icapi_timeseries_extractor
-      dependsOn: create_asset_hierarchy
       retries: 3
       timeout: 3600
       onFailure: abortWorkflow
@@ -33,16 +34,21 @@ workflowDefinition:
       parameters:
         function:
           externalId: icapi_datapoints_extractor
-      dependsOn: icapi_timeseries_extractor
+      dependsOn: 
+      - externalId: icapi_timeseries_extractor
+      - externalId: create_asset_hierarchy
       retries: 3
       timeout: 3600
       onFailure: abortWorkflow
     - externalId: icapi_ts_assets_contextualization
-      type: function
+      type: transformation
       parameters:
-        function:
+        transformation:
           externalId: icapi_ts_assets_contextualization
-      dependsOn: icapi_datapoints_extractor
+          concurrencyPolicy: waitForCurrent
+      dependsOn: 
+      - externalId: icapi_timeseries_extractor
+      - externalId: create_asset_hierarchy
       retries: 3
       timeout: 3600
       onFailure: abortWorkflow
@@ -51,7 +57,9 @@ workflowDefinition:
       parameters:
         function:
           externalId: oee_timeseries
-      dependsOn: icapi_ts_assets_contextualization
+      dependsOn: 
+      - externalId: icapi_ts_assets_contextualization
+      - externalId: icapi_datapoints_extractor
       retries: 3
       timeout: 3600
       onFailure: abortWorkflow

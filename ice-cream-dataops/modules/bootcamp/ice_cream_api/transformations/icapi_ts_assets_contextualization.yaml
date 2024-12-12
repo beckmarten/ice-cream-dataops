@@ -5,12 +5,12 @@ destination:
   type: timeseries
 ignoreNullFields: true
 isPublic: true
-conflictMode: upsert
+conflictMode: update
 # Specify credentials separately like this:
 # You can also use different credentials for running the transformations than the credentials you use to deploy.
 authentication:
-  clientId: {{ icapi_extractors_client_id }}
-  clientSecret: {{ icapi_extractors_client_secret }}
+  clientId: {{ data_pipeline_oee_client_id }}
+  clientSecret: {{ data_pipeline_oee_client_secret }}
   tokenUri: {{ IDP_TOKEN_URL }}
   # Optional: If idP requires providing the cicd_scopes
   cdfProjectName: {{ CDF_PROJECT }}
